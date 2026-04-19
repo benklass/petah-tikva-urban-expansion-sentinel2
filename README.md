@@ -1,173 +1,198 @@
-# Sentinel-2 Urban Expansion Detection in Petah Tikva (2018–2025)
+# Petah Tikva Urban Expansion Detection Using Sentinel-2
 
-This project analyzes urban expansion on the southeastern fringe of Petah Tikva, Israel, using Sentinel-2 satellite imagery, Google Earth Engine, and Python. It detects vegetation-to-built land conversion, identifies spatial hotspots, and quantifies land-use change over time.
+## Overview
 
----
+This project presents a geospatial remote sensing-based analysis of urban expansion on the southeastern fringe of Petah Tikva, Israel.
 
-## 📍 Project Overview
+The study integrates Sentinel-2 satellite imagery, Google Earth Engine, and Python-based spatial analysis to identify vegetation-to-built land conversion, construction-stage areas, and urban growth hotspots between 2018 and 2025.
 
-Rapid urban growth in the Gush Dan region is placing increasing pressure on natural land and infrastructure. This project develops an end-to-end geospatial workflow to:
+## Objectives
 
-- Detect vegetation loss and built-up expansion
-- Identify urban conversion hotspots
-- Quantify spatial land-use change between 2018 and 2025
+Map recent urban land conversion in Petah Tikva
 
----
+Quantify vegetation loss and built-up growth trends
 
-## 🛰️ Data
+Detect spatial hotspots of urban expansion
 
-- **Source:** Sentinel-2 Surface Reflectance (ESA)
-- **Years:** 2018, 2021, 2023, 2025
-- **Spatial resolution:** 10 m
+Apply spectral index analysis for land-cover change detection
 
-### Spectral Bands
-- B2 (Blue), B3 (Green), B4 (Red)  
-- B8 (NIR), B11 (SWIR1), B12 (SWIR2)
+Demonstrate an end-to-end Google Earth Engine → Python workflow
 
-### Derived Indices
-- **NDVI** – vegetation  
-- **NDBI** – built-up areas  
-- **BSI** – bare soil / construction  
+## Methodology
 
----
+### Spatial Analysis
 
-## ⚙️ Methodology
+The following multispectral variables were derived:
 
-### 1. Preprocessing (Google Earth Engine)
-- Cloud masking (QA60)
-- Seasonal composites (May–July)
-- Spectral index calculation (NDVI, NDBI, BSI)
-- Export to GeoTIFF
+NDVI (Normalized Difference Vegetation Index)
 
-### 2. Change Detection (Python)
-- Multi-temporal differencing (2018–2025)
-- Rule-based classification:
-  - NDVI decrease  
-  - NDBI increase  
-  - BSI increase  
-- Binary conversion mask generation
+NDBI (Normalized Difference Built-up Index)
 
-### 3. Post-processing
-- Speckle removal using raster filtering
-- Polygon extraction of hotspots
-- Area calculation (hectares)
+BSI (Bare Soil Index)
 
----
+Temporal change layers (2018–2025)
 
-## 📊 Key Results
+### Change Detection Logic
 
-- **Mean ΔNDVI:** −0.46 (vegetation decline)  
-- **Mean ΔNDBI:** +0.29 (built-up increase)  
-- **Mean ΔBSI:** +0.27 (bare soil / construction increase)  
-- Clear spatial clustering of urban expansion  
-- Dominant growth direction: **southeastern urban fringe**
+Urban conversion areas were identified using threshold-based classification:
 
----
+NDVI decline
 
-## 🗺️ Visual Outputs
+NDBI increase
 
-### NDVI Change and Hotspots
-![NDVI Hotspots](figures/ndvi2018_hotspots_overlay.png)
+BSI increase
 
-### BSI Construction Areas
-![BSI Construction](figures/bsi2025_construction_overlay.png)
+Vegetated/open land transitioning toward built surfaces
 
-### Conversion Mask
-![Conversion Mask](figures/conversion_mask.png)
+Higher values indicate stronger likelihood of recent urban transformation.
 
----
+### Python Geospatial Processing
 
-## 📁 Project Structure
+Python was used to:
 
+Generate conversion masks
 
+Remove isolated speckle patches
+
+Extract hotspot polygons
+
+Calculate changed area statistics
+
+Produce maps and figures
+
+## Project Structure
+
+```text
 petah-tikva-urban-expansion-sentinel2/
 │
-├── data/
-│ ├── PetahTikva_S2_2018.tif
-│ ├── PetahTikva_S2_2021.tif
-│ ├── PetahTikva_S2_2023.tif
-│ └── PetahTikva_S2_2025.tif
+├── 📁 data/
+│   ├── 🗺️ PetahTikva_S2_2018.tif
+│   ├── 🗺️ PetahTikva_S2_2021.tif
+│   ├── 🗺️ PetahTikva_S2_2023.tif
+│   ├── 🗺️ PetahTikva_S2_2025.tif
+│   └── 📝 sources.md
 │
-├── scripts/
-│ ├── gee_petah_tikva_preprocessing.js
-│ ├── main.py
-│ └── requirements.txt
+├── 📁 docs/
+│   ├── 🖼️ project_poster.jpg
+│   ├── 📕 project_poster.pdf
+│   └── 📘 report.pdf
 │
-├── outputs/
-│ ├── conversion_2018_2025.tif
-│ ├── construction_2018_2025.tif
-│ └── conversion_hotspots.geojson
+├── 📁 figures/
+│   ├── 🖼️ bsi2025_construction_overlay.png
+│   ├── 🖼️ conversion_mask.png
+│   ├── 📈 hist_bsi.png
+│   ├── 📈 hist_ndbi.png
+│   ├── 📈 hist_ndvi.png
+│   ├── 🖼️ ndvi_2018.png
+│   ├── 🖼️ ndvi_2025.png
+│   └── 🖼️ ndvi2018_hotspots_overlay.png
 │
-├── figures/
-│ ├── ndvi_2018.png
-│ ├── ndvi_2025.png
-│ ├── ndvi2018_hotspots_overlay.png
-│ ├── bsi2025_construction_overlay.png
-│ ├── conversion_mask.png
-│ ├── hist_ndvi.png
-│ ├── hist_ndbi.png
-│ └── hist_bsi.png
+├── 📁 outputs/
+│   ├── 🗺️ construction_2018_2025.tif
+│   ├── 🗺️ conversion_2018_2025.tif
+│   └── 📍 conversion_hotspots.geojson
 │
-├── docs/
-│ ├── project_poster.pdf
-│ ├── project_poster.jpg
-│ └── report.pdf
+├── 📁 scripts/
+│   ├── 📁 gee/
+│   │   └── 🌍 gee_petah_tikva_preprocessing.js
+│   │
+│   └── 📁 python/
+│       └── 🐍 main.py
 │
-└── README.md
+├── 📦 requirements.txt
+├── 📝 README.md
+└── ⚖️ LICENSE
+```
+## GIS / Raster Data
 
+Primary datasets:
 
----
+data/PetahTikva_S2_2018.tif
 
-## 🧠 Skills Demonstrated
+data/PetahTikva_S2_2021.tif
 
-- Remote sensing (Sentinel-2)
-- Spectral index analysis (NDVI, NDBI, BSI)
-- Google Earth Engine workflows
-- Python geospatial processing (rasterio, NumPy, GeoPandas)
-- Change detection modeling
-- Spatial data interpretation
+data/PetahTikva_S2_2023.tif
 
----
+data/PetahTikva_S2_2025.tif
 
-## 🚀 How to Run
+These raster stacks include:
 
-### 1. Install dependencies
+Sentinel-2 spectral bands
 
-pip install -r scripts/requirements.txt
+NDVI
 
+NDBI
 
-### 2. Run analysis
+BSI
 
-python scripts/main.py
+Cloud-filtered seasonal composites
 
+## Outputs
 
----
+Project outputs include:
 
-## 📄 Additional Resources
+Urban conversion masks
 
-- 📊 Poster: `docs/project_poster.pdf`
-- 📘 Full report: `docs/report.pdf`
+Construction-stage hotspot rasters
 
----
+GeoJSON hotspot polygons
 
-## 📬 Contact
+NDVI and BSI visual maps
 
-Benjamin Klass  
-Geospatial Data Analyst  
+Histogram figures
 
-📧 klassbenjamin@gmail.com  
-🔗 https://www.linkedin.com/in/benjamin-klass/  
+Poster and written report
 
----
+## Usage
 
-## ⚡ Notes
+1️⃣ Navigate to the Project Folder
 
-- Raw Sentinel-2 data is included for reproducibility  
-- GEE script (`.js`) contains full preprocessing pipeline  
-- Workflow demonstrates end-to-end satellite → insight pipeline  
+cd petah-tikva-urban-expansion-sentinel2
 
-<<<<<<< HEAD
----
-=======
----
->>>>>>> 7680b7266bfbb8236b80ee782e498dc48e4bfc8d
+2️⃣ Install Dependencies
+
+pip install -r requirements.txt
+
+3️⃣ Run the Python Analysis
+
+python scripts/python/main.py
+
+4️⃣ Review Figures and Outputs
+
+See:
+
+figures/
+
+outputs/
+
+docs/report.pdf
+
+## Data Sources
+
+European Space Agency Sentinel-2 imagery
+
+Google Earth Engine
+
+Derived spectral indices and processed outputs generated by author
+
+## Notes
+
+Sentinel-2 imagery was composited using dry-season cloud-filtered scenes to improve year-to-year consistency.
+
+Threshold-based change detection provides interpretable evidence of urban expansion but may not capture all transformation types.
+
+This project is intended for analytical, educational, and portfolio purposes.
+
+## License
+
+This project is licensed under the MIT License.
+
+Satellite imagery remains subject to European Space Agency / Copernicus licensing terms.
+
+## Author
+
+Benjamin Klass
+
+Geospatial Data Analyst (GIS, Remote Sensing, Machine Learning)
+
+Israel
