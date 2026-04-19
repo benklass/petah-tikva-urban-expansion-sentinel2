@@ -166,4 +166,8 @@ Geospatial Data Analyst
 - GEE script (`.js`) contains full preprocessing pipeline  
 - Workflow demonstrates end-to-end satellite → insight pipeline  
 
+<<<<<<< HEAD
 ---
+=======
+---
+>>>>>>> 7680b7266bfbb8236b80ee782e498dc48e4bfc8d
